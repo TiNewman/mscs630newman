@@ -12,7 +12,7 @@
 import java.util.Scanner;
 
 /**
- * Driver_lab2a
+ * Driver_lab2b
  *
  * This class walks us through use of the Extended Euclidean algorithm,
  * which finds the greatest common divisor and its connected 'x' and 'y'.
