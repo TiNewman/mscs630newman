@@ -104,7 +104,7 @@ public class AESCipher {
    * 
    * @return String[], which holds the 11 round keys based off 'hexKey'.
    */
-  public static String[] AESRoundKeys(String hexKey){
+  public static String[] aesRoundKeys(String hexKey){
 
     String[][] wMatrix = new String[4][44];
     Integer[] wNew = new Integer[4];

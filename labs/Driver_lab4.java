@@ -38,11 +38,11 @@ public class Driver_lab4 {
     String hexKey = input.nextLine();
     input.close();
 
-    String[] roundKeys = AESCipher.AESRoundKeys(hexKey);
+    String[] roundKeysHex = AESCipher.aesRoundKeys(hexKey);
 
-    for (int i = 0; i < roundKeys.length; i++) {
+    for (int i = 0; i < roundKeysHex.length; i++) {
 
-      System.out.println(roundKeys[i]);
+      System.out.println(roundKeysHex[i]);
     }
 
   }
