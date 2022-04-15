@@ -1,21 +1,12 @@
 package com.file_encryption;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.Label;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.plaf.FileChooserUI;
  
 public class ApplicationMain extends JDialog {
 
@@ -69,7 +60,7 @@ public class ApplicationMain extends JDialog {
       // Decrypt here
     }
 
-    
+
     // Get everything inside the file.
     ArrayList<String> textInsideFile = getFileInsides(fileToRead);
 
