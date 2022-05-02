@@ -1,5 +1,7 @@
 package com.file_encryption;
 
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -41,8 +43,13 @@ public class ApplicationMain extends JDialog {
     File fileToRead = new File("holderFile.txt");
 
     if (result == JFileChooser.APPROVE_OPTION) {
+
       fileToRead = fileChooser.getSelectedFile();
       filePath = fileChooser.getSelectedFile().getAbsolutePath();
+    }
+    else if (result == JFileChooser.CANCEL_OPTION) {
+
+      closeApplication();
     }
 
 
@@ -75,7 +82,7 @@ public class ApplicationMain extends JDialog {
 
 
 
-  public void closeApplication() {
+  public static void closeApplication() {
    
     System.exit(0);
   }
@@ -88,6 +95,11 @@ public class ApplicationMain extends JDialog {
 
       // Get password
       password = JOptionPane.showInputDialog("Enter your password please (can't be null)?");
+
+      if (password == null) {
+
+        closeApplication();
+      }
     }
 
     if (isNewPassword) {
