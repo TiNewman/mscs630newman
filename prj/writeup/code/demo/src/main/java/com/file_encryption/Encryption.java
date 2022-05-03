@@ -35,6 +35,8 @@ public class Encryption {
   public static final String SALT = "thisIsADemo";
   public static final String Algorithm = "AES/CBC/PKCS5Padding";
 
+  public Encryption() {}
+
 
   public static SecretKey generateKey(int n) throws NoSuchAlgorithmException {
 
@@ -134,7 +136,7 @@ public static SecretKey getKeyFromPassword(String password)
   }
 
 
-  public static boolean encrypt(String fileToEncrypt, String userPassword, boolean deleteFile)
+  public static boolean encrypt(File fileToEncrypt, String userPassword, boolean deleteFile)
   throws NoSuchAlgorithmException, IOException, IllegalBlockSizeException, 
   InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, 
   NoSuchPaddingException {
@@ -153,21 +155,23 @@ public static SecretKey getKeyFromPassword(String password)
     }
     
     // Holder as a File will be passed to this function.
-    File inputFile = Paths.get(
-    "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/easyFile.txt")
-    .toFile();
+    //File fileToEncrypt = Paths.get(
+    //"C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/easyFile.txt")
+    //.toFile();
 
-    String holder = inputFile.getName();
-    String[] fileNameCut = holder.split(".t");
+    String holder = fileToEncrypt.getName();
+    String[] fileNameCut = holder.split(".txt");
+
+    String[] filePath = fileToEncrypt.getPath().split(fileNameCut[0]);
 
     File encryptedFile = new File(
-    "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/" + fileNameCut[0] + "ENCRYPTED.txt");
+    filePath[0] + fileNameCut[0] + "ENCRYPTED.txt");
     
-    encryptFileProcess(key, ivParameterSpec, inputFile, encryptedFile);
+    encryptFileProcess(key, ivParameterSpec, fileToEncrypt, encryptedFile);
 
     if (deleteFile) {
 
-      boolean deleted = inputFile.delete();
+      boolean deleted = fileToEncrypt.delete();
 
       if (!deleted) { 
 
@@ -179,7 +183,7 @@ public static SecretKey getKeyFromPassword(String password)
     return true;
   }
 
-  public static boolean decrypt(String fileToDecrypt, String userPassword, boolean deleteFile, boolean renameForTest) 
+  public static boolean decrypt(File encryptedFile, String userPassword, boolean deleteFile, boolean renameForTest) 
   throws NoSuchAlgorithmException, IOException, IllegalBlockSizeException, 
   InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, 
   NoSuchPaddingException {
@@ -198,24 +202,26 @@ public static SecretKey getKeyFromPassword(String password)
     IvParameterSpec ivParameterSpec = generateIv();
 
     // Holder as a File will be passed to this function.
-    File encryptedFile = Paths.get(
-    "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/easyFileENCRYPTED.txt")
-    .toFile();
+   // File encryptedFile = Paths.get(
+    //"C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/easyFileENCRYPTED.txt")
+    //.toFile();
 
     String holder = encryptedFile.getName();
     String[] fileNameCut = holder.split("ENCRYPTED");
 
+    String[] filePath = encryptedFile.getPath().split(fileNameCut[0]);
+
     if (renameForTest) {
 
       File decryptedFile = new File(
-      "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/" + fileNameCut[0] + "DECRYPTED" + fileNameCut[1]);
+      filePath[0] + fileNameCut[0] + "DECRYPTED" + fileNameCut[1]);
 
       decryptFileProcess(key, ivParameterSpec, encryptedFile, decryptedFile);
     }
     else {
-
+      
       File decryptedFile = new File(
-      "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/" + fileNameCut[0] + fileNameCut[1]);
+      filePath[0] + fileNameCut[0] + fileNameCut[1]);
 
       decryptFileProcess(key, ivParameterSpec, encryptedFile, decryptedFile);
     }
@@ -236,19 +242,9 @@ public static SecretKey getKeyFromPassword(String password)
 
 
   public static void main(String[] args) {
-    System.out.println("Hello from the Java Main Function!");
 
+    System.out.println("Hello");
     /*try {
-      givenFile_whenEncrypt_thenSuccess();
-
-    }
-    catch (Exception e) {
-
-      System.out.println("Error: " + e);
-    }
-    */
-    
-    try {
       encrypt("", "password1", true);
     }
     catch (Exception e) {
@@ -263,6 +259,7 @@ public static SecretKey getKeyFromPassword(String password)
 
       System.out.println("Error: " + e);
     }
+    */
     
     
   }

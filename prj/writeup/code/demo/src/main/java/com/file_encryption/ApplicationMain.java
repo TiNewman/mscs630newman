@@ -1,6 +1,7 @@
 package com.file_encryption;
 
 
+//import com.file_encryption.Encryption;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,13 +40,11 @@ public class ApplicationMain extends JDialog {
     fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
     int result = fileChooser.showOpenDialog(this);
 
-    String filePath = "";
     File fileToRead = new File("holderFile.txt");
 
     if (result == JFileChooser.APPROVE_OPTION) {
 
       fileToRead = fileChooser.getSelectedFile();
-      filePath = fileChooser.getSelectedFile().getAbsolutePath();
     }
     else if (result == JFileChooser.CANCEL_OPTION) {
 
@@ -56,15 +55,36 @@ public class ApplicationMain extends JDialog {
     // Get the password from the user.
     String password = "";
 
+    Encryption encryptionClass = new Encryption();
+
     if (optionTaken == 0) { 
 
       password = passwordIntake(true);
+
+      System.out.println("To Path: " + fileToRead.toPath());
+      System.out.println("Absolute: " + fileToRead.getAbsolutePath());
       // Encrypt here
+      try {
+
+        encryptionClass.encrypt(fileToRead, password, true);
+      }
+      catch (Exception e) {
+
+        System.out.println("Error: " + e);
+      }
     }
     else {
 
       password = passwordIntake(false);
       // Decrypt here
+      try {
+
+        encryptionClass.decrypt(fileToRead, password, true, false);
+      }
+      catch (Exception e) {
+
+        System.out.println("Error: " + e);
+      }
     }
 
 
