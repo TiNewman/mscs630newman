@@ -153,11 +153,6 @@ public static SecretKey getKeyFromPassword(String password)
       System.out.println("Error: " + e);
       return false;
     }
-    
-    // Holder as a File will be passed to this function.
-    //File fileToEncrypt = Paths.get(
-    //"C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/easyFile.txt")
-    //.toFile();
 
     String holder = fileToEncrypt.getName();
     String[] fileNameCut = holder.split(".txt");
@@ -201,11 +196,6 @@ public static SecretKey getKeyFromPassword(String password)
 
     IvParameterSpec ivParameterSpec = generateIv();
 
-    // Holder as a File will be passed to this function.
-   // File encryptedFile = Paths.get(
-    //"C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/easyFileENCRYPTED.txt")
-    //.toFile();
-
     String holder = encryptedFile.getName();
     String[] fileNameCut = holder.split("ENCRYPTED");
 
@@ -219,7 +209,7 @@ public static SecretKey getKeyFromPassword(String password)
       decryptFileProcess(key, ivParameterSpec, encryptedFile, decryptedFile);
     }
     else {
-      
+
       File decryptedFile = new File(
       filePath[0] + fileNameCut[0] + fileNameCut[1]);
 
