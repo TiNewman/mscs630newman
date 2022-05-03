@@ -33,6 +33,7 @@ import java.nio.file.Paths;
 public class Encryption {
 
   public static final String SALT = "thisIsADemo";
+  public static final String Algorithm = "AES/CBC/PKCS5Padding";
 
 
   public static SecretKey generateKey(int n) throws NoSuchAlgorithmException {
@@ -59,17 +60,15 @@ public static SecretKey getKeyFromPassword(String password)
   public static IvParameterSpec generateIv() {
 
     byte[] iv = new byte[16];
-    new SecureRandom().nextBytes(iv);
-
     return new IvParameterSpec(iv);
   }
 
-  public static void encryptFile(String algorithm, SecretKey key, IvParameterSpec iv,
+  public static void encryptFileProcess(SecretKey key, IvParameterSpec iv,
     File inputFile, File outputFile) throws IOException, NoSuchPaddingException,
     NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException,
     BadPaddingException, IllegalBlockSizeException {
     
-    Cipher cipher = Cipher.getInstance(algorithm);
+    Cipher cipher = Cipher.getInstance(Algorithm);
     cipher.init(Cipher.ENCRYPT_MODE, key, iv);
 
     FileInputStream inputStream = new FileInputStream(inputFile);
@@ -99,12 +98,12 @@ public static SecretKey getKeyFromPassword(String password)
     outputStream.close();
   }
 
-  public static void decryptFile(String algorithm, SecretKey key, IvParameterSpec iv,
+  public static void decryptFileProcess(SecretKey key, IvParameterSpec iv,
     File encryptedFile, File decryptedFile) throws IOException, NoSuchPaddingException,
     NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException,
     BadPaddingException, IllegalBlockSizeException {
 
-    Cipher cipher = Cipher.getInstance(algorithm);
+    Cipher cipher = Cipher.getInstance(Algorithm);
     cipher.init(Cipher.DECRYPT_MODE, key, iv);
 
     FileInputStream inputStream = new FileInputStream(encryptedFile);
@@ -148,27 +147,71 @@ public static SecretKey getKeyFromPassword(String password)
       System.out.println("Error: " + e);
     }
 
-    String algorithm = "AES/CBC/PKCS5Padding";
     IvParameterSpec ivParameterSpec = generateIv();
+    
     File inputFile = Paths.get(
       "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/easyFile.txt")
       .toFile();
+
     File encryptedFile = new File(
       "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/encryptedFile.txt");
-    File decryptedFile = new File(
-      "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/decryptedFile.txt");
 
-    encryptFile(algorithm, key, ivParameterSpec, inputFile, encryptedFile);
-    decryptFile(algorithm, key, ivParameterSpec, encryptedFile, decryptedFile);
+    encryptFileProcess(key, ivParameterSpec, inputFile, encryptedFile);
+
+    inputFile.delete();
+    File decryptedFile = new File(
+      "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/easyFile.txt");
+    
+    ivParameterSpec = generateIv();
+    decryptFileProcess(key, ivParameterSpec, encryptedFile, decryptedFile);
 
     encryptedFile.delete();
+  }
 
+
+  public static boolean encrypt(String fileToEncrypt, String userPassword) 
+  throws NoSuchAlgorithmException, IOException, IllegalBlockSizeException, 
+  InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, 
+  NoSuchPaddingException {
+
+    IvParameterSpec ivParameterSpec = generateIv();
+
+    SecretKey key = generateKey(256);
+    try {
+
+      key = getKeyFromPassword(userPassword);
     }
+    catch (Exception e) {
+
+      System.out.println("Error: " + e);
+    }
+    
+    // Holder as a File will be passed to this function.
+    File inputFile = Paths.get(
+    "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/easyFile.txt")
+    .toFile();
+
+    String holder = inputFile.getName();
+
+    System.out.println(holder);
+
+    String[] fileNameCut = holder.split(".t");
+
+    System.out.println(fileNameCut[0]);
+
+    File encryptedFile = new File(
+    "C:/Users/MASTE/Documents/GitHub/mscs630newman/prj/writeup/code/demo/src/main/java/com/file_encryption/" + fileNameCut[0] + "ENCRYPTED.txt");
+    
+    encryptFileProcess(key, ivParameterSpec, inputFile, encryptedFile);
+
+    return true;
+  }
+
 
   public static void main(String[] args) {
     System.out.println("Hello from the Java Main Function!");
 
-    try {
+    /*try {
       givenFile_whenEncrypt_thenSuccess();
 
     }
@@ -176,6 +219,17 @@ public static SecretKey getKeyFromPassword(String password)
 
       System.out.println("Error: " + e);
     }
+    */
+    
+
+    /*try {
+      encrypt("", "password1");
+    }
+    catch (Exception e) {
+
+      System.out.println("Error: " + e);
+    }
+    */
     
   }
   

@@ -69,7 +69,7 @@ public class ApplicationMain extends JDialog {
 
 
     // Get everything inside the file.
-    ArrayList<String> textInsideFile = getFileInsides(fileToRead);
+    // ArrayList<String> textInsideFile = getFileInsides(fileToRead);
 
     /*for (String singleLine : textInsideFile) {
       
