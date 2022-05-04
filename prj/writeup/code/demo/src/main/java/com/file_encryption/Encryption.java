@@ -10,7 +10,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.BadPaddingException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKeyFactory;
-import javax.crypto.SealedObject;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -18,16 +17,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Base64;
 import javax.crypto.IllegalBlockSizeException;
-import java.nio.file.Paths;
  
 
 public class Encryption {
@@ -233,7 +228,7 @@ public static SecretKey getKeyFromPassword(String password)
 
   public static void main(String[] args) {
 
-    System.out.println("Hello");
+    //System.out.println("Hello");
     /*try {
       encrypt("", "password1", true);
     }
@@ -250,8 +245,6 @@ public static SecretKey getKeyFromPassword(String password)
       System.out.println("Error: " + e);
     }
     */
-    
-    
   }
   
 }
