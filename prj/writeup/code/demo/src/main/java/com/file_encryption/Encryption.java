@@ -192,7 +192,17 @@ public static SecretKey getKeyFromPassword(String password)
     IvParameterSpec ivParameterSpec = generateIv();
 
     String holder = encryptedFile.getName();
-    String[] fileNameCut = holder.split("ENCRYPTED");
+    String[] fileNameCut = new String[] {" ", ""};
+    
+    if (holder.contains("ENCRYPTED")){
+
+      fileNameCut = holder.split("ENCRYPTED");
+    }
+    else {
+
+      fileNameCut = holder.split(".tx");
+      fileNameCut[1] = "..txt";
+    }
 
     String[] filePath = encryptedFile.getPath().split(fileNameCut[0]);
 

@@ -65,6 +65,11 @@ public class ApplicationMain extends JDialog {
       choices,
       defaultChoice);
 
+    if (optionTaken == -1) {
+
+      closeApplication();
+    }
+
     // Get what file the user wants.
     JFileChooser fileChooser = new JFileChooser();
     fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -112,7 +117,7 @@ public class ApplicationMain extends JDialog {
       }
       catch (Exception e) {
 
-        System.out.println("Error: " + e);
+        JOptionPane.showMessageDialog(null, "You entered the wrong password!\n");
       }
     }
 
