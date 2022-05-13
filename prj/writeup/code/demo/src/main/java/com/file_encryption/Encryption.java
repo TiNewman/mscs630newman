@@ -27,11 +27,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import javax.crypto.IllegalBlockSizeException;
@@ -51,12 +49,26 @@ import javax.crypto.IllegalBlockSizeException;
 public class Encryption {
 
   public static final String SALT = "thisIsADemo";
-  //public static final String Algorithm = "AES/CBC/PKCS5Padding";
-  //public static final String Algorithm = "AES/GCM/NoPadding";
 
   public Encryption() {}
 
-
+  /**
+   * generateKey
+   *
+   * This function is used to create completely random
+   * key based off of a key generator given by javax.crypto.
+   * It creates a symmetric secret key used for encryption/decryption.
+   * Whatever we pass is the actual key size:
+   *  AES (128)
+   *  DES (56)
+   *  DESede (168)
+   *  HmacSHA1
+   *  HmacSHA256
+   * 
+   * @param n key size.
+   *  
+   * @return SecretKey, is the secret key to be used in the encryption/decryption.
+   */
   public static SecretKey generateKey(int n) throws NoSuchAlgorithmException {
 
     KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
@@ -67,11 +79,26 @@ public class Encryption {
     return key;
   }
 
-
+  /**
+   * getKeyFromPassword
+   *
+   * This function is used to create a secret key
+   * based off of a set string.
+   * Here we actually set the parameters of the generator to use PBKDF2
+   * with SHA1 HMAC (which  mixes a secret key,
+   * hashes the result with the hash function, 
+   * mixes that hash value with the secret key,
+   * finally applies the hash function a second time).
+   * This allows us to then create a cryptographic key with the password and the
+   * secrete key, which all comes together to create the finished secrete key.
+   * 
+   * @param password user password.
+   *  
+   * @return SecretKey, is the secret key to be used in the encryption/decryption.
+   */
   public static SecretKey getKeyFromPassword(String password)
     throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-    //SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256"); PBKDF2WithHmacSHA1
     SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
     KeySpec spec = new PBEKeySpec(password.toCharArray(), SALT.getBytes(), 65536, 256);
     SecretKey secret = new SecretKeySpec(factory.generateSecret(spec)
@@ -80,14 +107,30 @@ public class Encryption {
     return secret;
   }
 
-  
+  /**
+   * IvParameterSpec
+   *
+   * This function is used to create an IV or initialization vector.
+   *  
+   * @return IvParameterSpec, is the IV to be used in the encryption/decryption.
+   */
   public static IvParameterSpec generateIv() {
 
     byte[] iv = new byte[16];
     return new IvParameterSpec(iv);
   }
 
-
+  /**
+   * fileToByte
+   *
+   * This function is used to read everything from a file,
+   * convert and save it into a byte array that will then be 
+   * encrypted/decrypted based off each byte.
+   * 
+   * @param file file to convert to byte[].
+   *  
+   * @return byte[], is the file in form of byte[].
+   */
   public static byte[] fileToByte(File file) throws IOException {
 
     byte [] byteData = new byte[(int) file.length()];
@@ -104,7 +147,17 @@ public class Encryption {
     return byteData;
   }
 
-
+  /**
+   * encryptAESCBC
+   *
+   * This function is 
+   * 
+   * @param key 
+   * @param iv 
+   * @param inputFile 
+   * @param outputFile 
+   *  
+   */
   public static void encryptAESCBC(SecretKey key, IvParameterSpec iv,
     File inputFile, File outputFile) throws IOException, NoSuchPaddingException,
     NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException,
