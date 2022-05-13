@@ -6,7 +6,7 @@
  * due date: May 15th, 2022
  * version: 1.0
  *
- * This file contains the the UI and calls to the Encryption.java file.
+ * This file contains the UI and calls to the Encryption.java file.
  */
 package com.file_encryption;
 
@@ -117,6 +117,7 @@ public class ApplicationMain extends JDialog {
       }
       catch (Exception e) {
 
+        System.out.println("Error: " + e);
         JOptionPane.showMessageDialog(null, "You entered the wrong password!\n");
       }
     }
