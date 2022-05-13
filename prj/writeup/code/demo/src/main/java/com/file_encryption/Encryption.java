@@ -39,7 +39,7 @@ import javax.crypto.IllegalBlockSizeException;
  *
  * This class contains the code that uses Java's encryption standards.
  * For this application, we are focusing on an AES implementation with 
- * a symmetric-key block cipher (256 bit encryption with stream encryption). 
+ * a symmetric-key block cipher (128 bit encryption with stream encryption). 
  * We do this as we use the same key for both encrypting and decrypting files.
  * Right now this encryption class can only encrypt or decrypt single files
  * at a time, however it can be called multiple times.
