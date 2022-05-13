@@ -75,7 +75,7 @@ public class AppTest {
     // Encrypt the file, but don't delete the original.
     try {
       
-      Encryption.encrypt(inputFile, "password1", false);
+      Encryption.encrypt(inputFile, "password1", false, "GCM");
     }
     catch (Exception e) {
 
@@ -89,7 +89,7 @@ public class AppTest {
     // Decrypt te file, don't delete the file, and make sure the name is different.
     try {
 
-      Encryption.decrypt(encryptedFile, "password1", false, true);
+      Encryption.decrypt(encryptedFile, "password1", false, true, "GCM");
     }
     catch (Exception e) {
 
@@ -114,7 +114,7 @@ public class AppTest {
 
     try {
       
-      Encryption.encrypt(inputFile, "password1", false);
+      Encryption.encrypt(inputFile, "password1", false, "GCM");
     }
     catch (Exception e) {
 
@@ -127,7 +127,7 @@ public class AppTest {
 
     try {
 
-      Encryption.decrypt(encryptedFile, "password1", false, true);
+      Encryption.decrypt(encryptedFile, "password1", false, true, "GCM");
     }
     catch (Exception e) {
 
@@ -151,7 +151,7 @@ public class AppTest {
 
     try {
       
-      Encryption.encrypt(inputFile, "password1", false);
+      Encryption.encrypt(inputFile, "password1", false, "GCM");
     }
     catch (Exception e) {
 
@@ -164,7 +164,7 @@ public class AppTest {
 
     try {
 
-      Encryption.decrypt(encryptedFile, "password1", false, true);
+      Encryption.decrypt(encryptedFile, "password1", false, true, "GCM");
     }
     catch (Exception e) {
 

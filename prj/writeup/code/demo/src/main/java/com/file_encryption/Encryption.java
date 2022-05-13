@@ -52,7 +52,7 @@ public class Encryption {
 
   public static final String SALT = "thisIsADemo";
   //public static final String Algorithm = "AES/CBC/PKCS5Padding";
-  public static final String Algorithm = "AES/GCM/NoPadding";
+  //public static final String Algorithm = "AES/GCM/NoPadding";
 
   public Encryption() {}
 
@@ -67,7 +67,8 @@ public class Encryption {
     return key;
   }
 
-public static SecretKey getKeyFromPassword(String password)
+
+  public static SecretKey getKeyFromPassword(String password)
     throws NoSuchAlgorithmException, InvalidKeySpecException {
 
     //SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256"); PBKDF2WithHmacSHA1
@@ -79,58 +80,13 @@ public static SecretKey getKeyFromPassword(String password)
     return secret;
   }
 
+  
   public static IvParameterSpec generateIv() {
 
     byte[] iv = new byte[16];
     return new IvParameterSpec(iv);
   }
 
-  /*public static void encryptFileProcess(SecretKey key, byte[] iv,
-    File inputFile, File outputFile) throws IOException, NoSuchPaddingException,
-    NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException,
-    BadPaddingException, IllegalBlockSizeException {
-    
-    Cipher cipher = Cipher.getInstance(Algorithm);
-    GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(16*8, iv);
-
-    //cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-    cipher.init(Cipher.ENCRYPT_MODE, key, gcmParameterSpec);
-
-    FileInputStream inputStream = new FileInputStream(inputFile);
-    FileOutputStream outputStream = new FileOutputStream(outputFile);
-
-    byte[] buffer = new byte[64];
-    int bytesRead;
-
-    while ((bytesRead = inputStream.read(buffer)) != -1) {
-
-      byte[] output = cipher.update(buffer, 0, bytesRead);
-
-      //byte[] outputBytes = cipher.doFinal(buffer); // added
-
-      if (output != null) {
-
-        outputStream.write(output);
-      }
-
-      /*if (output != null) {
-
-        outputStream.write(outputBytes);
-      }
-      
-    }
-
-
-    byte[] outputBytes = cipher.doFinal();
-
-    if (outputBytes != null) {
-
-      outputStream.write(outputBytes);
-    }
-
-    inputStream.close();
-    outputStream.close();
-  }*/
 
   public static byte[] fileToByte(File file) throws IOException {
 
@@ -149,83 +105,52 @@ public static SecretKey getKeyFromPassword(String password)
   }
 
 
- /* public static void decryptFileProcess(SecretKey key, byte[] iv,
+  public static void encryptAESCBC(SecretKey key, IvParameterSpec iv,
+    File inputFile, File outputFile) throws IOException, NoSuchPaddingException,
+    NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException,
+    BadPaddingException, IllegalBlockSizeException {
+
+    // Need the file to be chars.
+    byte[] inputFileAsBytes = fileToByte(inputFile);
+    
+    // Creating the instance of the AES encryption of type CBC with PKCS5 Padding
+    // and using the key (password) and Iv.
+    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+    cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+
+    // Actually encrypting it.
+    byte[] cipherText = cipher.doFinal(inputFileAsBytes);
+
+    // Writing to the file.
+    FileOutputStream outputStream = new FileOutputStream(outputFile);
+    outputStream.write(cipherText);
+    outputStream.close();
+  }
+
+
+  public static void decryptAESCBC(SecretKey key, IvParameterSpec iv,
     File encryptedFile, File decryptedFile) throws IOException, NoSuchPaddingException,
     NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException,
     BadPaddingException, IllegalBlockSizeException {
 
-    Cipher cipher = Cipher.getInstance(Algorithm);
-    GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(16*8, iv);
+    // Need the file to be chars.
+    byte[] encryptedFileAsBytes = fileToByte(encryptedFile);
 
-    System.out.println("GOT HERE1!");
+    // Start the  decryption cipher as using CBC with PKCS5 padding.
+    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+    cipher.init(Cipher.DECRYPT_MODE, key, iv);
 
-    cipher.init(Cipher.DECRYPT_MODE, key, gcmParameterSpec);
-    //cipher.init(Cipher.DECRYPT_MODE, key, iv);
-    System.out.println("GOT HERE2!");
+    // Actually encrypting it.
+    byte[] decryptedText = cipher.doFinal(encryptedFileAsBytes);
 
-    FileInputStream inputStream = new FileInputStream(encryptedFile);
+    // Writing to the file.
     FileOutputStream outputStream = new FileOutputStream(decryptedFile);
-
-    byte[] buffer = new byte[64];
-    int bytesRead;
-
-    byte[] holder1 = fileToByte(encryptedFile);
-
-    ByteBuffer byteBuffer = ByteBuffer.wrap(holder1);
-
-    //get the rest of encrypted data
-    byte[] cipherBytes = new byte[byteBuffer.remaining()];
-    byteBuffer.get(cipherBytes);
-    System.out.println("GOT HERE3!");
-
-    for (byte single: cipherBytes) {
-
-      System.out.println(single + " ");
-    }
-    byte[] fixed = cipher.doFinal(cipherBytes);
-    System.out.println("GOT HERE4!");
-
-
-    for (byte single: fixed) {
-
-      System.out.println(single + " ");
-    }
-
-    /*while ((bytesRead = inputStream.read(buffer)) != -1) {
-
-      System.out.println("GOT HERE2!");
-
-      byte[] outputBytes = cipher.doFinal(buffer, 0, bytesRead); // added
-
-      System.out.println("GOT HERE3!");
-
-      byte[] output = cipher.update(buffer, 0, bytesRead);
-
-      /*if (output != null) {
-
-        outputStream.write(output);
-      }
-      if (outputBytes != null) {
-
-        outputStream.write(outputBytes);
-      }
-    }*/
-
-    /*byte[] output = cipher.doFinal();
-
-    if (output != null) {
-
-      outputStream.write(output);
-    }
-
-    
-
-    inputStream.close();
+    outputStream.write(decryptedText);
     outputStream.close();
-  }*/
+  }
 
 
-  public static void encryptFileProcess(SecretKey key, byte[] iv,
+  public static void encryptAES256GCM(SecretKey key, byte[] iv,
   File inputFile, File encryptedFile) throws Exception {
 
     // Need the file to be chars.
@@ -248,7 +173,7 @@ public static SecretKey getKeyFromPassword(String password)
 
   
 
-  public static void decryptFileProcess(SecretKey key, byte[] iv,
+  public static void decryptAES256GCM(SecretKey key, byte[] iv,
   File encryptedFile, File decryptedFile) throws Exception {
     // Open the file and change it to bytes.
     byte[] holder1 = fileToByte(encryptedFile);
@@ -269,10 +194,12 @@ public static SecretKey getKeyFromPassword(String password)
   }
 
 
-  public static boolean encrypt(File fileToEncrypt, String userPassword, boolean deleteFile)
+  public static boolean encrypt(File fileToEncrypt, String userPassword, 
+  boolean deleteFile, String modeType)
   throws Exception {
 
-    //IvParameterSpec ivParameterSpec = generateIv();
+    IvParameterSpec ivParameterSpec = generateIv();
+    byte[] IV = new byte[12];
 
     SecretKey key = generateKey(256);
     try {
@@ -293,15 +220,16 @@ public static SecretKey getKeyFromPassword(String password)
     File encryptedFile = new File(
     filePath[0] + fileNameCut[0] + "ENCRYPTED.txt");
 
-    ////--------------------------
-    byte[] IV = new byte[12];
-    //SecureRandom random = new SecureRandom();
-    //random.nextBytes(IV);
-    //-----------
+
+    if (modeType.equals("GCM")) {
+
+      encryptAES256GCM(key, IV, fileToEncrypt, encryptedFile);
+    }
+    else {
+
+      encryptAESCBC(key, ivParameterSpec, fileToEncrypt, encryptedFile);
+    }
     
-    //encryptFileProcess(key, ivParameterSpec, fileToEncrypt, encryptedFile);
-    //encryptFileProcess(key, IV, fileToEncrypt, encryptedFile);
-    encryptFileProcess(key, IV, fileToEncrypt, encryptedFile);
 
     if (deleteFile) {
 
@@ -317,7 +245,8 @@ public static SecretKey getKeyFromPassword(String password)
     return true;
   }
 
-  public static boolean decrypt(File encryptedFile, String userPassword, boolean deleteFile, boolean renameForTest) 
+  public static boolean decrypt(File encryptedFile, String userPassword, boolean deleteFile,
+  boolean renameForTest, String modeType) 
   throws Exception {
 
     SecretKey key = generateKey(256);
@@ -331,11 +260,8 @@ public static SecretKey getKeyFromPassword(String password)
       System.out.println("Error12: " + e);
     }
 
-    //IvParameterSpec ivParameterSpec = generateIv();
-
+    IvParameterSpec ivParameterSpec = generateIv();
     byte[] IV = new byte[12];
-    //SecureRandom random = new SecureRandom();
-    //random.nextBytes(IV);
 
     String holder = encryptedFile.getName();
     String[] fileNameCut = new String[] {" ", ""};
@@ -357,18 +283,28 @@ public static SecretKey getKeyFromPassword(String password)
       File decryptedFile = new File(
       filePath[0] + fileNameCut[0] + "DECRYPTED" + fileNameCut[1]);
 
-      //decryptFileProcess(key, ivParameterSpec, encryptedFile, decryptedFile);
-      //decryptFileProcess(key, IV, encryptedFile, decryptedFile);
-      decryptFileProcess(key, IV, encryptedFile, decryptedFile);
+      if (modeType.equals("GCM")) {
+
+        decryptAES256GCM(key, IV, encryptedFile, decryptedFile);
+      }
+      else {
+
+        decryptAESCBC(key, ivParameterSpec, encryptedFile, decryptedFile);
+      }
     }
     else {
 
       File decryptedFile = new File(
       filePath[0] + fileNameCut[0] + fileNameCut[1]);
 
-      //decryptFileProcess(key, ivParameterSpec, encryptedFile, decryptedFile);
-      //decryptFileProcess(key, IV, encryptedFile, decryptedFile);
-      decryptFileProcess(key, IV, encryptedFile, decryptedFile);
+      if (modeType.equals("GCM")) {
+
+        decryptAES256GCM(key, IV, encryptedFile, decryptedFile);
+      }
+      else {
+
+        decryptAESCBC(key, ivParameterSpec, encryptedFile, decryptedFile);
+      }
     }
 
     if (deleteFile) {

@@ -70,6 +70,29 @@ public class ApplicationMain extends JDialog {
       closeApplication();
     }
 
+    // Take the user's input for encryption/decryption type.
+    Object[] choices1 = {"AES GCM Mode 256", "AES CBC 128"};
+    Object defaultChoice1 = choices1[0];
+    int optionTaken1 = JOptionPane.showOptionDialog(this, 
+      "What Encryption or Decryption type would you like to use?",
+      "Decision Time",
+      JOptionPane.YES_NO_OPTION,
+      JOptionPane.QUESTION_MESSAGE,
+      null,
+      choices1,
+      defaultChoice1);
+
+    String toSend = "";
+
+    if (optionTaken1 == -1) {
+
+      closeApplication();
+    }
+    else {
+
+      toSend =  (optionTaken1 == 1 ? "CBC" : "GCM");
+    }
+
     // Get what file the user wants.
     JFileChooser fileChooser = new JFileChooser();
     fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -99,7 +122,7 @@ public class ApplicationMain extends JDialog {
       // Encrypt here
       try {
 
-        Encryption.encrypt(fileToRead, password, true);
+        Encryption.encrypt(fileToRead, password, true, toSend);
       }
       catch (Exception e) {
 
@@ -113,7 +136,7 @@ public class ApplicationMain extends JDialog {
       // Decrypt here
       try {
 
-        Encryption.decrypt(fileToRead, password, true, false);
+        Encryption.decrypt(fileToRead, password, true, false, toSend);
       }
       catch (Exception e) {
 
