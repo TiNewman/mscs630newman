@@ -260,7 +260,7 @@ public class Encryption {
    * The generalized encryption works with a plain text and a secret key which,
    * when used together in the cipher, give you a corresponding cipher text.
    * Before explaining the GCM variation, I need to explain its precursor, CTR.
-   * CTR where it first encrypts the IV and uses it as a counter, where the after
+   * CTR first encrypts the IV and uses it as a counter, where the after
    * each round it encrypts the counter to help add block noise.
    * It is also a stream cipher which encrypts each binary bit in the stream.
    * CTR does need a nonce, which is used to create the actual key stream.
